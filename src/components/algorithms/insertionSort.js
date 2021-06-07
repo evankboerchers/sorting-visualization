@@ -9,15 +9,40 @@ export function insertionSort(array) {
     key = array[i];
     j = i - 1;
 
+    animations.push({
+      array: array.slice(),
+      colors: [{ type: 'compare', indices: [i, j] }],
+    });
+
     while (j >= 0 && array[j] > key) {
+      array[j + 1] = array[j];
+
       animations.push({
         array: array.slice(),
-        type: 'compare',
-        compare: [i, j],
+        colors: [
+          { type: 'complete', indices: [i] },
+          { type: 'swap', indices: [j + 1] },
+        ],
       });
-      array[j + 1] = array[j];
+
       j = j - 1;
     }
+
     array[j + 1] = key;
+
+    animations.push({
+      array: array.slice(),
+      colors: [
+        { type: 'complete', indices: [i] },
+        { type: 'swap', indices: [j + 1] },
+      ],
+    });
+
+    animations.push({
+      array: array.slice(),
+      colors: [{ type: 'complete', indices: [i, j + 1] }],
+    });
   }
+
+  return animations;
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import './sortVisualizer.css';
 import { bubbleSort } from './algorithms/bubbleSort';
+import { insertionSort } from './algorithms/insertionSort';
 
 const ARRAY_RANGE = [5, 500];
 
@@ -64,12 +65,18 @@ function SortVisualizer() {
   const getBarWidth = () => 100 / arraySize;
 
   function handleSortClick() {
-    const method = document.getElementById('method');
+    const method = document.getElementById('method').value;
     let array = numberArray.slice();
 
+    console.log(`performing ${method} sort`);
+
     switch (method) {
-      default:
+      case 'insertion':
+        animate(insertionSort(array));
+        break;
+      case 'bubble':
         animate(bubbleSort(array));
+        break;
     }
   }
 
@@ -86,19 +93,59 @@ function SortVisualizer() {
   }
 
   function animationStep(animation, i, bars, complete) {
-    setTimeout(function cb() {
+    setTimeout(function an() {
       reColorBars(bars);
       updateArray(animation.array);
-      try {
-        bars[animation.compare[0]].style.backgroundColor = COMPARE_COLOR;
-        bars[animation.compare[1]].style.backgroundColor = COMPARE_COLOR;
-      } catch {}
-      try {
-        bars[animation.swap[0]].style.backgroundColor = SWAP_COLOR;
-        bars[animation.swap[1]].style.backgroundColor = SWAP_COLOR;
-      } catch {}
+
+      if ('colors' in animation) {
+        colorBars(bars, animation);
+      }
       if (complete) reColorBars(bars, true);
     }, i * animationSpeed);
+  }
+
+  function colorBars(bars, animation) {
+    for (let color of animation.colors) {
+      switch (color.type) {
+        case 'compare':
+          for (let index of color.indices) {
+            try {
+              bars[index].style.backgroundColor = COMPARE_COLOR;
+            } catch {
+              console.log('error coloring bars in step');
+            }
+          }
+          break;
+        case 'swap':
+          for (let index of color.indices) {
+            try {
+              bars[index].style.backgroundColor = SWAP_COLOR;
+            } catch {
+              console.log('error coloring bars in step');
+            }
+          }
+          break;
+        case 'complete':
+          for (let index of color.indices) {
+            try {
+              bars[index].style.backgroundColor = COMP_COLOR;
+            } catch {
+              console.log('error coloring bars in step');
+            }
+          }
+          break;
+      }
+
+      if (color.type == 'swap') {
+        for (let index of color.indices) {
+          try {
+            bars[index].style.backgroundColor = SWAP_COLOR;
+          } catch {
+            console.log('error coloring bars in step');
+          }
+        }
+      }
+    }
   }
 
   function reColorBars(bars) {
@@ -123,6 +170,7 @@ function SortVisualizer() {
 
   return (
     <div className="visualizer-container">
+      <div className="wip"> WIP: More algorithms to come! </div>
       <div className="bar-container">
         {numberArray.map((value, index) => createArrayBar(value, index))}
       </div>
@@ -132,8 +180,8 @@ function SortVisualizer() {
             <option className="selection" value="bubble">
               Bubble Sort
             </option>
-            <option className="selection" value="quick">
-              Quick Sort
+            <option className="selection" value="insertion">
+              Insertion Sort
             </option>
           </select>
           <button
@@ -169,7 +217,7 @@ function SortVisualizer() {
               id="speed"
               name="speed"
               min="1"
-              max="70"
+              max="600"
               defaultValue={ANIMATION_SPEED_DEFAULT}
             ></input>
           </div>

@@ -10,15 +10,13 @@ export function bubbleSort(array) {
     for (let i = 0; i < len; i++) {
       animations.push({
         array: array.slice(),
-        type: 'compare',
-        compare: [i, i + 1],
+        colors: [{ type: 'compare', indices: [i, i + 1] }],
       });
 
       if (array[i] > array[i + 1]) {
         animations.push({
           array: array.slice(),
-          type: 'swap',
-          swap: [i, i + 1],
+          colors: [{ type: 'swap', indices: [i, i + 1] }],
         });
 
         let tmp = array[i];
@@ -26,7 +24,7 @@ export function bubbleSort(array) {
         array[i + 1] = tmp;
         swapped = true;
 
-        animations.push({ array: array.slice(), type: 'swapped' });
+        animations.push({ array: array.slice() });
       }
     }
   } while (swapped);
