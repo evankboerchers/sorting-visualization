@@ -1,3 +1,6 @@
+import { Animation } from '../Animation';
+import { Color } from '../Color';
+
 export function insertionSort(array) {
   let animations = [];
 
@@ -9,39 +12,24 @@ export function insertionSort(array) {
     key = array[i];
     j = i - 1;
 
-    animations.push({
-      array: array.slice(),
-      colors: [{ type: 'compare', indices: [i, j] }],
-    });
+    animations.push(Animation(array.slice(), [Color('hold', [i, j])]));
 
     while (j >= 0 && array[j] > key) {
       array[j + 1] = array[j];
 
-      animations.push({
-        array: array.slice(),
-        colors: [
-          { type: 'complete', indices: [i] },
-          { type: 'swap', indices: [j + 1] },
-        ],
-      });
+      animations.push(
+        Animation(array.slice(), [Color('hold', [i]), Color('swap', [j + 1])])
+      );
 
       j = j - 1;
     }
 
     array[j + 1] = key;
 
-    animations.push({
-      array: array.slice(),
-      colors: [
-        { type: 'complete', indices: [i] },
-        { type: 'swap', indices: [j + 1] },
-      ],
-    });
-
-    animations.push({
-      array: array.slice(),
-      colors: [{ type: 'complete', indices: [i, j + 1] }],
-    });
+    animations.push(
+      Animation(array.slice(), [Color('hold', [i]), Color('swap', [j + 1])])
+    );
+    animations.push(Animation(array.slice(), [Color('hold', [i, j + 1])]));
   }
 
   return animations;

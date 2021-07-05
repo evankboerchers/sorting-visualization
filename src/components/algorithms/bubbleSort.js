@@ -1,3 +1,6 @@
+import { Animation } from '../Animation';
+import { Color } from '../Color';
+
 export function bubbleSort(array) {
   let animations = [];
 
@@ -8,23 +11,17 @@ export function bubbleSort(array) {
   do {
     swapped = false;
     for (let i = 0; i < len; i++) {
-      animations.push({
-        array: array.slice(),
-        colors: [{ type: 'compare', indices: [i, i + 1] }],
-      });
+      animations.push(Animation(array.slice(), [Color('compare', [i, i + 1])]));
 
       if (array[i] > array[i + 1]) {
-        animations.push({
-          array: array.slice(),
-          colors: [{ type: 'swap', indices: [i, i + 1] }],
-        });
+        animations.push(Animation(array.slice(), [Color('swap', [i, i + 1])]));
 
         let tmp = array[i];
         array[i] = array[i + 1];
         array[i + 1] = tmp;
         swapped = true;
 
-        animations.push({ array: array.slice() });
+        animations.push(Animation(array.slice(), []));
       }
     }
   } while (swapped);

@@ -2,6 +2,7 @@ import React from 'react';
 import './sortVisualizer.css';
 import { bubbleSort } from './algorithms/bubbleSort';
 import { insertionSort } from './algorithms/insertionSort';
+import { quickSort } from './algorithms/quickSort';
 
 const ARRAY_RANGE = [5, 500];
 
@@ -14,6 +15,8 @@ const COMPARE_COLOR = 'red';
 const SWAP_COLOR = 'green';
 
 const COMP_COLOR = 'grey';
+
+const HOLD_COLOR = 'teal';
 
 const ARRAY_SIZE_DEFAULT = 15;
 
@@ -77,6 +80,9 @@ function SortVisualizer() {
       case 'bubble':
         animate(bubbleSort(array));
         break;
+      case 'quick':
+        animate(quickSort(array));
+        break;
     }
   }
 
@@ -106,45 +112,53 @@ function SortVisualizer() {
 
   function colorBars(bars, animation) {
     for (let color of animation.colors) {
-      switch (color.type) {
-        case 'compare':
-          for (let index of color.indices) {
-            try {
-              bars[index].style.backgroundColor = COMPARE_COLOR;
-            } catch {
-              console.log('error coloring bars in step');
-            }
-          }
-          break;
-        case 'swap':
-          for (let index of color.indices) {
-            try {
-              bars[index].style.backgroundColor = SWAP_COLOR;
-            } catch {
-              console.log('error coloring bars in step');
-            }
-          }
-          break;
-        case 'complete':
-          for (let index of color.indices) {
-            try {
-              bars[index].style.backgroundColor = COMP_COLOR;
-            } catch {
-              console.log('error coloring bars in step');
-            }
-          }
-          break;
+      for (let index of color.indices) {
+        try {
+          bars[index].style.backgroundColor = getColor(color.type);
+        } catch {}
       }
+    }
+    // switch (color.type) {
+    //   case 'compare':
+    //     for (let index of color.indices) {
+    //       try {
+    //         bars[index].style.backgroundColor = COMPARE_COLOR;
+    //       } catch {
+    //         console.log('error coloring bars in step');
+    //       }
+    //     }
+    //     break;
+    //   case 'swap':
+    //     for (let index of color.indices) {
+    //       try {
+    //         bars[index].style.backgroundColor = SWAP_COLOR;
+    //       } catch {
+    //         console.log('error coloring bars in step');
+    //       }
+    //     }
+    //     break;
+    //   case 'complete':
+    //     for (let index of color.indices) {
+    //       try {
+    //         bars[index].style.backgroundColor = COMP_COLOR;
+    //       } catch {
+    //         console.log('error coloring bars in step');
+    //       }
+    //     }
+    //     break;
+    // }
+  }
 
-      if (color.type == 'swap') {
-        for (let index of color.indices) {
-          try {
-            bars[index].style.backgroundColor = SWAP_COLOR;
-          } catch {
-            console.log('error coloring bars in step');
-          }
-        }
-      }
+  function getColor(type) {
+    switch (type) {
+      case 'compare':
+        return COMPARE_COLOR;
+      case 'swap':
+        return SWAP_COLOR;
+      case 'complete':
+        return COMP_COLOR;
+      case 'hold':
+        return HOLD_COLOR;
     }
   }
 
@@ -182,6 +196,9 @@ function SortVisualizer() {
             </option>
             <option className="selection" value="insertion">
               Insertion Sort
+            </option>
+            <option className="selection" value="quick">
+              Quick Sort
             </option>
           </select>
           <button
