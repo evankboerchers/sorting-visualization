@@ -3,6 +3,7 @@ import './sortVisualizer.css';
 import { bubbleSort } from './algorithms/bubbleSort';
 import { insertionSort } from './algorithms/insertionSort';
 import { quickSort } from './algorithms/quickSort';
+import { mergeSort } from './algorithms/mergeSort';
 
 const ARRAY_RANGE = [5, 500];
 
@@ -13,8 +14,6 @@ const REG_COLOR = 'Purple';
 const COMPARE_COLOR = 'red';
 
 const SWAP_COLOR = 'green';
-
-const COMP_COLOR = 'grey';
 
 const HOLD_COLOR = 'teal';
 
@@ -83,6 +82,8 @@ function SortVisualizer() {
       case 'quick':
         animate(quickSort(array));
         break;
+      case 'merge':
+        animate(mergeSort(array));
     }
   }
 
@@ -118,35 +119,6 @@ function SortVisualizer() {
         } catch {}
       }
     }
-    // switch (color.type) {
-    //   case 'compare':
-    //     for (let index of color.indices) {
-    //       try {
-    //         bars[index].style.backgroundColor = COMPARE_COLOR;
-    //       } catch {
-    //         console.log('error coloring bars in step');
-    //       }
-    //     }
-    //     break;
-    //   case 'swap':
-    //     for (let index of color.indices) {
-    //       try {
-    //         bars[index].style.backgroundColor = SWAP_COLOR;
-    //       } catch {
-    //         console.log('error coloring bars in step');
-    //       }
-    //     }
-    //     break;
-    //   case 'complete':
-    //     for (let index of color.indices) {
-    //       try {
-    //         bars[index].style.backgroundColor = COMP_COLOR;
-    //       } catch {
-    //         console.log('error coloring bars in step');
-    //       }
-    //     }
-    //     break;
-    // }
   }
 
   function getColor(type) {
@@ -155,8 +127,6 @@ function SortVisualizer() {
         return COMPARE_COLOR;
       case 'swap':
         return SWAP_COLOR;
-      case 'complete':
-        return COMP_COLOR;
       case 'hold':
         return HOLD_COLOR;
     }
@@ -182,6 +152,25 @@ function SortVisualizer() {
     );
   };
 
+  function SortOptions() {
+    return (
+      <select id="method" className="control-item">
+        <option className="selection" value="bubble">
+          Bubble Sort
+        </option>
+        <option className="selection" value="insertion">
+          Insertion Sort
+        </option>
+        <option className="selection" value="quick">
+          Quick Sort
+        </option>
+        <option className="selection" value="merge">
+          Merge Sort
+        </option>
+      </select>
+    );
+  }
+
   return (
     <div className="visualizer-container">
       <div className="wip"> WIP: More algorithms to come! </div>
@@ -190,17 +179,7 @@ function SortVisualizer() {
       </div>
       <div className="control-panel">
         <div className="control-wrap">
-          <select id="method" className="control-item">
-            <option className="selection" value="bubble">
-              Bubble Sort
-            </option>
-            <option className="selection" value="insertion">
-              Insertion Sort
-            </option>
-            <option className="selection" value="quick">
-              Quick Sort
-            </option>
-          </select>
+          <SortOptions />
           <button
             className="control-color control-button control-item"
             onClick={() => handleSortClick()}

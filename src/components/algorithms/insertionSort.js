@@ -8,12 +8,14 @@ export function insertionSort(array) {
 
   let len = array.length;
 
+  //loop through each element
   for (i = 1; i < len; i++) {
     key = array[i];
     j = i - 1;
 
     animations.push(Animation(array.slice(), [Color('hold', [i, j])]));
 
+    //check previous elements and check where element belongs
     while (j >= 0 && array[j] > key) {
       array[j + 1] = array[j];
 

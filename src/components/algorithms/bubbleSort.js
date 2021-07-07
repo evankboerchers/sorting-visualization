@@ -10,9 +10,12 @@ export function bubbleSort(array) {
 
   do {
     swapped = false;
+
+    //loop through array
     for (let i = 0; i < len; i++) {
       animations.push(Animation(array.slice(), [Color('compare', [i, i + 1])]));
 
+      //swap if left is larger
       if (array[i] > array[i + 1]) {
         animations.push(Animation(array.slice(), [Color('swap', [i, i + 1])]));
 

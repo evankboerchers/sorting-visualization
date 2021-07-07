@@ -9,6 +9,7 @@ export function quickSort(arr) {
   return animations;
 }
 
+//recursive function
 function quickSortRec(arr, left, right, animations) {
   var index;
 
@@ -23,6 +24,7 @@ function quickSortRec(arr, left, right, animations) {
   }
 }
 
+//swap elements
 function swap(arr, leftIndex, rightIndex) {
   var temp = arr[leftIndex];
   arr[leftIndex] = arr[rightIndex];
@@ -30,6 +32,7 @@ function swap(arr, leftIndex, rightIndex) {
 }
 
 function partition(arr, left, right, animations) {
+  //partition index is middle of array
   var pivotIndex = Math.floor((right + left) / 2),
     pivot = arr[pivotIndex];
   var i = left,
@@ -43,6 +46,7 @@ function partition(arr, left, right, animations) {
   );
 
   while (i <= j) {
+    //increase i while that element is less than pivot
     while (arr[i] < pivot) {
       i++;
       animations.push(
@@ -52,6 +56,8 @@ function partition(arr, left, right, animations) {
         ])
       );
     }
+
+    //decrease j while that element is greater than pivot
     while (arr[j] > pivot) {
       j--;
       animations.push(
@@ -61,6 +67,8 @@ function partition(arr, left, right, animations) {
         ])
       );
     }
+
+    //swaps elements
     if (i <= j) {
       swap(arr, i, j);
       animations.push(
