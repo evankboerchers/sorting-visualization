@@ -4,22 +4,31 @@ import { bubbleSort } from './algorithms/bubbleSort';
 import { insertionSort } from './algorithms/insertionSort';
 import { quickSort } from './algorithms/quickSort';
 import { mergeSort } from './algorithms/mergeSort';
+import { selectionSort } from './algorithms/selectionSort';
 
 const ARRAY_RANGE = [5, 500];
 
 const BAR_SCALE = 1.5;
 
-const REG_COLOR = 'Purple';
+const REG_COLOR = '#36279c';
 
-const COMPARE_COLOR = 'red';
+const COMPARE_COLOR = '#9c222c';
 
-const SWAP_COLOR = 'green';
+const SWAP_COLOR = '#269950';
 
-const HOLD_COLOR = 'teal';
+const HOLD_COLOR = '#b86827';
 
 const ARRAY_SIZE_DEFAULT = 15;
 
 const ANIMATION_SPEED_DEFAULT = 50;
+
+const METHODS = [
+  { value: 'bubble', label: 'Bubble Sort' },
+  { value: 'insertion', label: 'Insertion Sort' },
+  { value: 'quick', label: 'Quick Sort' },
+  { value: 'merge', label: 'Merge Sort' },
+  { value: 'selection', label: 'Selection Sort' },
+];
 
 function SortVisualizer() {
   const [animationSpeed, setAnimationSpeed] = React.useState(
@@ -30,9 +39,9 @@ function SortVisualizer() {
 
   const [numberArray, setNumberArray] = React.useState([0]);
 
-  const [sorted, setSorted] = React.useState(false);
+  const [method, setMethod] = React.useState('bubble');
 
-  React.useEffect(resetArray, []);
+  var timeouts = [];
 
   React.useEffect(resetArray, [arraySize]);
 
@@ -84,6 +93,11 @@ function SortVisualizer() {
         break;
       case 'merge':
         animate(mergeSort(array));
+        break;
+      case 'selection':
+        animate(selectionSort(array));
+        break;
+      default:
     }
   }
 
@@ -91,7 +105,7 @@ function SortVisualizer() {
     const bars = document.getElementsByClassName('array-bar');
 
     for (let i = 0; i < animations.length; i++) {
-      if (i != animations.length - 1) {
+      if (i !== animations.length - 1) {
         animationStep(animations[i], i, bars, false);
       } else {
         animationStep(animations[i], i, bars, true);
@@ -100,15 +114,17 @@ function SortVisualizer() {
   }
 
   function animationStep(animation, i, bars, complete) {
-    setTimeout(function an() {
-      reColorBars(bars);
-      updateArray(animation.array);
+    timeouts.push(
+      setTimeout(function an() {
+        reColorBars(bars);
+        updateArray(animation.array);
 
-      if ('colors' in animation) {
-        colorBars(bars, animation);
-      }
-      if (complete) reColorBars(bars, true);
-    }, i * animationSpeed);
+        if ('colors' in animation) {
+          colorBars(bars, animation);
+        }
+        if (complete) reColorBars(bars, true);
+      }, i * animationSpeed)
+    );
   }
 
   function colorBars(bars, animation) {
@@ -129,6 +145,8 @@ function SortVisualizer() {
         return SWAP_COLOR;
       case 'hold':
         return HOLD_COLOR;
+      default:
+        return REG_COLOR;
     }
   }
 
@@ -154,26 +172,31 @@ function SortVisualizer() {
 
   function SortOptions() {
     return (
-      <select id="method" className="control-item">
-        <option className="selection" value="bubble">
-          Bubble Sort
-        </option>
-        <option className="selection" value="insertion">
-          Insertion Sort
-        </option>
-        <option className="selection" value="quick">
-          Quick Sort
-        </option>
-        <option className="selection" value="merge">
-          Merge Sort
-        </option>
+      <select
+        id="method"
+        name="selectedMethod"
+        className="control-item"
+        onChange={(e) => {
+          setMethod(e.target.value);
+        }}
+      >
+        {METHODS.map((m) =>
+          m.value === method ? (
+            <option className="selection" value={m.value} selected>
+              {m.label}
+            </option>
+          ) : (
+            <option className="selection" value={m.value}>
+              {m.label}
+            </option>
+          )
+        )}
       </select>
     );
   }
 
   return (
     <div className="visualizer-container">
-      <div className="wip"> WIP: More algorithms to come! </div>
       <div className="bar-container">
         {numberArray.map((value, index) => createArrayBar(value, index))}
       </div>

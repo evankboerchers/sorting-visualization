@@ -34,62 +34,62 @@ function merge(arr, left, mid, right, animations) {
   // Merge the temp arrays back into arr[l..r]
 
   // Initial index of first subarray
-  var i = 0;
+  var ii = 0;
 
   // Initial index of second subarray
-  var j = 0;
+  var jj = 0;
 
   // Initial index of merged subarray
   var k = left;
 
-  while (i < n1 && j < n2) {
-    if (L[i] <= R[j]) {
-      arr[k] = L[i];
+  while (ii < n1 && jj < n2) {
+    if (L[ii] <= R[jj]) {
+      arr[k] = L[ii];
       animations.push(
         Animation(arr.slice(), [
-          Color('hold', range(left, right)),
+          Color('compare', range(left, right)),
           Color('swap', [k]),
         ])
       );
-      i++;
+      ii++;
     } else {
-      arr[k] = R[j];
+      arr[k] = R[jj];
       animations.push(
         Animation(arr.slice(), [
-          Color('hold', range(left, right)),
+          Color('compare', range(left, right)),
           Color('swap', [k]),
         ])
       );
-      j++;
+      jj++;
     }
     k++;
   }
 
   // Copy the remaining elements of
   // L[], if there are any
-  while (i < n1) {
-    arr[k] = L[i];
+  while (ii < n1) {
+    arr[k] = L[ii];
     animations.push(
       Animation(arr.slice(), [
-        Color('hold', range(left, right)),
+        Color('compare', range(left, right)),
         Color('swap', [k]),
       ])
     );
-    i++;
+    ii++;
     k++;
   }
 
   // Copy the remaining elements of
   // R[], if there are any
-  while (j < n2) {
-    arr[k] = R[j];
+  while (jj < n2) {
+    arr[k] = R[jj];
     animations.push(
       Animation(arr.slice(), [
-        Color('hold', range(left, right)),
+        Color('compare', range(left, right)),
         Color('swap', [k]),
       ])
     );
-    j++;
+    jj++;
     k++;
   }
 }
